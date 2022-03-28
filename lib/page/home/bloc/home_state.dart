@@ -7,12 +7,10 @@ class HomeState extends Equatable {
   const HomeState({
     this.status = HomeStatus.initial,
     this.users = const <User>[],
-    this.hasReachedMax = false,
   });
 
   final HomeStatus status;
   final List<User> users;
-  final bool hasReachedMax;
 
   HomeState copyWith({
     HomeStatus? status,
@@ -22,15 +20,14 @@ class HomeState extends Equatable {
     return HomeState(
       status: status ?? this.status,
       users: users ?? this.users,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
   @override
   String toString() {
-    return '''PostState { status: $status, hasReachedMax: $hasReachedMax, posts: ${users.length} }''';
+    return '''PostState { status: $status,  posts: ${users.length} }''';
   }
 
   @override
-  List<Object> get props => [status, users, hasReachedMax];
+  List<Object> get props => [status, users];
 }

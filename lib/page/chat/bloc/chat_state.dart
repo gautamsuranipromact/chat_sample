@@ -14,7 +14,6 @@ class ChatState extends Equatable {
     this.status = ChatStatus.initial,
     this.sendStatus = SendStatus.pure,
     this.messages = const <Message>[],
-    this.hasReachedMax = false,
     this.userId = -1,
     this.text = "",
   });
@@ -22,7 +21,6 @@ class ChatState extends Equatable {
   final ChatStatus status;
   final SendStatus sendStatus;
   final List<Message> messages;
-  final bool hasReachedMax;
   final int userId;
   final String text;
 
@@ -38,7 +36,6 @@ class ChatState extends Equatable {
       status: status ?? this.status,
       sendStatus: sendStatus ?? this.sendStatus,
       messages: messages ?? this.messages,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       text: text ?? this.text,
       userId: userId ?? this.userId,
     );
@@ -46,10 +43,10 @@ class ChatState extends Equatable {
 
   @override
   String toString() {
-    return '''PostState { status: $status, hasReachedMax: $hasReachedMax, posts: ${messages.length} }''';
+    return '''PostState { status: $status, posts: ${messages.length} }''';
   }
 
   @override
   List<Object> get props =>
-      [status, messages, hasReachedMax, text, sendStatus, userId];
+      [status, messages, text, sendStatus, userId];
 }

@@ -19,7 +19,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     MessageFetched event,
     Emitter<ChatState> emit,
   ) async {
-    if (state.hasReachedMax) return;
     try {
       if (state.status == ChatStatus.initial) {
         List<Message> messages =

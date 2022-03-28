@@ -1,14 +1,20 @@
 import 'dart:async';
 
+import 'package:chat_sample/db/database_manager.dart';
 import 'package:chat_sample/model/login_request.dart';
 import 'package:chat_sample/model/login_response.dart';
 import 'package:chat_sample/preferences.dart';
 import 'package:chat_sample/rest/dio_client.dart';
+import 'package:chat_sample/util.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
+
+  AuthenticationRepository() {
+    Util.getDataBase();
+  }
 
   Stream<AuthenticationStatus> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
