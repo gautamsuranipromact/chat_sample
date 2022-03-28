@@ -1,7 +1,7 @@
 import 'package:chat_sample/authentication/bloc/authentication_repository.dart';
-import 'package:chat_sample/page/login/bloc/LoginBloc.dart';
-import 'package:chat_sample/page/login/bloc/LoginEvent.dart';
-import 'package:chat_sample/page/login/bloc/LoginState.dart';
+import 'package:chat_sample/page/login/bloc/login_bloc.dart';
+import 'package:chat_sample/page/login/bloc/login_event.dart';
+import 'package:chat_sample/page/login/bloc/login_state.dart';
 import 'package:chat_sample/page/login/login_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
