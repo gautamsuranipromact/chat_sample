@@ -13,17 +13,12 @@ class Message {
       this.createdDateTime,
       this.id});
 
-  Message.fromJson(Map<String, dynamic> json, int myId) {
+  Message.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     fromUserId = json['fromUserId'];
     toUserId = json['toUserId'];
     createdDateTime = json['createdDateTime'];
     id = json['id'];
-    if (fromUserId == myId) {
-      isSent = true;
-    }else{
-      isSent = false;
-    }
   }
 
   Map<String, dynamic> toJson() {

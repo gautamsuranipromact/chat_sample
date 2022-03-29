@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:chat_sample/db/database_manager.dart';
 import 'package:chat_sample/model/login_request.dart';
 import 'package:chat_sample/model/login_response.dart';
 import 'package:chat_sample/preferences.dart';
@@ -41,6 +40,7 @@ class AuthenticationRepository {
 
   void logOut() async {
     (await Preferences.init())?.clear();
+    Util.getDataBase()!.deleteAllData();
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 

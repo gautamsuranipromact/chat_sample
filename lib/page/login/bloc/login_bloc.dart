@@ -2,6 +2,7 @@ import 'package:chat_sample/authentication/bloc/authentication_repository.dart';
 import 'package:chat_sample/page/login/bloc/login_event.dart';
 import 'package:chat_sample/page/login/bloc/login_state.dart';
 import 'package:chat_sample/page/login/login_status.dart';
+import 'package:chat_sample/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
@@ -28,6 +29,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginSubmitted event,
     Emitter<LoginState> emit,
   ) async {
+    if (!(await Util.hasNetwork())) {
+      return;
+    }
     if (state.name.isEmpty || state.name.contains(" ")) {
       emit(state.copyWith(invalidName: true));
       return;

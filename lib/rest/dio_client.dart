@@ -29,9 +29,7 @@ class DioClient {
   }
 
   Future<List<User>> getUser() async {
-    _dio.options.headers['content-Type'] = 'application/json';
-    _dio.options.headers["authorization"] =
-        (await Preferences.init())?.getString(Preferences.token);
+    await setHeaders();
 
     Response userData = await _dio.get(APIConstants.users);
 
@@ -46,18 +44,15 @@ class DioClient {
   }
 
   Future<List<Message>> getMessage({required int userId}) async {
-    _dio.options.headers['content-Type'] = 'application/json';
-    _dio.options.headers["authorization"] =
-        (await Preferences.init())?.getString(Preferences.token);
+    await setHeaders();
 
     Response userData =
         await _dio.get(APIConstants.messages + userId.toString());
 
-    int? myId = (await Preferences.init())?.getInt(Preferences.id);
     if (userData.statusCode == 200) {
       List<Message> temp = [];
       for (int i = 0; i < userData.data.length; i++) {
-        temp.add(Message.fromJson(userData.data[i], myId!));
+        temp.add(Message.fromJson(userData.data[i]));
       }
       return temp;
     }
@@ -65,10 +60,13 @@ class DioClient {
   }
 
   Future<void> sendMessage({required SendMessageRequest request}) async {
+    await setHeaders();
+    await _dio.post(APIConstants.messages, data: request.toJson());
+  }
+
+  setHeaders() async {
     _dio.options.headers['content-Type'] = 'application/json';
     _dio.options.headers["authorization"] =
         (await Preferences.init())?.getString(Preferences.token);
-    Response userData =
-        await _dio.post(APIConstants.messages, data: request.toJson());
   }
 }

@@ -1,4 +1,5 @@
 import 'package:chat_sample/db/database_manager.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:intl/intl.dart';
 
 class Util {
@@ -16,5 +17,16 @@ class Util {
   static MyDatabase? getDataBase() {
     database ??= MyDatabase();
     return database;
+  }
+
+  static Future<bool> hasNetwork() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      return true;
+    }
+    if (connectivityResult == ConnectivityResult.wifi) {
+      return true;
+    }
+    return false;
   }
 }

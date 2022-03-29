@@ -15,7 +15,6 @@ class HomeState extends Equatable {
   HomeState copyWith({
     HomeStatus? status,
     List<User>? users,
-    bool? hasReachedMax,
   }) {
     return HomeState(
       status: status ?? this.status,

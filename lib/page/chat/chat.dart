@@ -55,7 +55,7 @@ class _PostsListState extends State<MessageList> {
       builder: (context, state) {
         switch (state.status) {
           case ChatStatus.failure:
-            return const Center(child: Text('failed to fetch posts'));
+            return const Center(child: Text('failed to fetch messages'));
           case ChatStatus.success:
             if (state.messages.isEmpty) {
               return const Center(child: Text('no messages'));

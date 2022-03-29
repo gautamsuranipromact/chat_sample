@@ -6,6 +6,7 @@ import 'package:chat_sample/page/chat/bloc/chat_event.dart';
 import 'package:chat_sample/page/chat/bloc/chat_state.dart';
 import 'package:chat_sample/preferences.dart';
 import 'package:chat_sample/rest/dio_client.dart';
+import 'package:chat_sample/util.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
@@ -21,18 +22,39 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ) async {
     try {
       if (state.status == ChatStatus.initial) {
-        List<Message> messages =
-            await DioClient().getMessage(userId: state.userId);
-        messages
-            .sort((a, b) => b.createdDateTime!.compareTo(a.createdDateTime!));
-        return emit(state.copyWith(
-          status: ChatStatus.success,
-          messages: messages,
-          hasReachedMax: false,
-        ));
+        _getDataFromDatabase(event, emit);
+        if (await Util.hasNetwork()) {
+          List<Message> messages =
+          await DioClient().getMessage(userId: state.userId);
+          if (messages.isNotEmpty) {
+            await Util.getDataBase()!.insertMultipleMessages(messages);
+            await _getDataFromDatabase(event, emit);
+          } else {
+            return emit(state.copyWith(
+              status: ChatStatus.success,
+            ));
+          }
+        }else{
+          return emit(state.copyWith(
+            status: ChatStatus.success,
+          ));
+        }
       }
     } catch (_) {
       emit(state.copyWith(status: ChatStatus.failure));
+    }
+  }
+
+  Future<void> _getDataFromDatabase(event, emit) async {
+    int? myId = (await Preferences.init())?.getInt(Preferences.id);
+    List<Message> messages =
+        await Util.getDataBase()!.getMessageByUser(myId!, state.userId);
+    messages.sort((a, b) => b.createdDateTime!.compareTo(a.createdDateTime!));
+    if (messages.isNotEmpty) {
+      emit(state.copyWith(
+        status: ChatStatus.success,
+        messages: messages,
+      ));
     }
   }
 
@@ -50,6 +72,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     Emitter<ChatState> emit,
   ) async {
     if (state.text.isNotEmpty) {
+      if (!(await Util.hasNetwork())) {
+        return;
+      }
       emit(state.copyWith(
           sendStatus: SendStatus.submissionInProgress,
           messages: state.messages));

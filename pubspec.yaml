@@ -44,6 +44,7 @@ dependencies:
   sqlite3_flutter_libs:
   path_provider:
   path:
+  connectivity_plus: ^2.2.1
 
 dev_dependencies:
   flutter_test:

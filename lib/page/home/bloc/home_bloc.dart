@@ -18,16 +18,35 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     try {
       if (state.status == HomeStatus.initial) {
-        List<User> users = await DioClient().getUser();
-        Util.getDataBase()!.insertMultipleEntries(users);
-        return emit(state.copyWith(
-          status: HomeStatus.success,
-          users: users,
-          hasReachedMax: false,
-        ));
+        _getDataFromDatabase(event, emit);
+        if (await Util.hasNetwork()) {
+          List<User> serverUsers = await DioClient().getUser();
+          if (serverUsers.isNotEmpty) {
+            await Util.getDataBase()!.insertMultipleUsers(serverUsers);
+            await _getDataFromDatabase(event, emit);
+          } else {
+            return emit(state.copyWith(
+              status: HomeStatus.success,
+            ));
+          }
+        } else {
+          return emit(state.copyWith(
+            status: HomeStatus.success,
+          ));
+        }
       }
-    } catch (_) {
+    } catch (error) {
       emit(state.copyWith(status: HomeStatus.failure));
+    }
+  }
+
+  Future<void> _getDataFromDatabase(event, emit) async {
+    List<User> users = await Util.getDataBase()!.getUsers();
+    if (users.isNotEmpty) {
+      emit(state.copyWith(
+        status: HomeStatus.success,
+        users: users,
+      ));
     }
   }
 }

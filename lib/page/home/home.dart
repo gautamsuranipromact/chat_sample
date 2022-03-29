@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => HomePage());
+    return MaterialPageRoute<void>(builder: (_) => const HomePage());
   }
 
   @override
@@ -27,13 +29,15 @@ class HomePage extends StatelessWidget {
             icon: const Icon(Icons.logout),
           )
         ]),
-        body: PostsList(),
+        body: const PostsList(),
       ),
     );
   }
 }
 
 class PostsList extends StatefulWidget {
+  const PostsList({Key? key}) : super(key: key);
+
   @override
   _PostsListState createState() => _PostsListState();
 }
@@ -53,7 +57,7 @@ class _PostsListState extends State<PostsList> {
       builder: (context, state) {
         switch (state.status) {
           case HomeStatus.failure:
-            return const Center(child: Text('failed to fetch posts'));
+            return const Center(child: Text('failed to fetch users'));
           case HomeStatus.success:
             if (state.users.isEmpty) {
               return const Center(child: Text('no users'));

@@ -27,13 +27,15 @@ class App extends StatelessWidget {
         create: (_) => AuthenticationBloc(
           authenticationRepository: authenticationRepository,
         ),
-        child: AppView(),
+        child: const AppView(),
       ),
     );
   }
 }
 
 class AppView extends StatefulWidget {
+  const AppView({Key? key}) : super(key: key);
+
   @override
   _AppViewState createState() => _AppViewState();
 }
