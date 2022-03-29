@@ -5,8 +5,8 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
-import 'package:chat_sample/model/user.dart' as userModel;
-import 'package:chat_sample/model/message.dart' as messageModel;
+import 'package:chat_sample/model/user.dart' as user_model;
+import 'package:chat_sample/model/message.dart' as message_model;
 
 part 'database_manager.g.dart';
 
@@ -41,16 +41,16 @@ class MyDatabase extends _$MyDatabase {
   @override
   int get schemaVersion => 1;
 
-  Future<List<userModel.User>> getUsers() async {
+  Future<List<user_model.User>> getUsers() async {
     List<UserData> temp = await (select(user)).get();
-    List<userModel.User> users = [];
+    List<user_model.User> users = [];
     for (int i = 0; i < temp.length; i++) {
-      users.add(userModel.User(id: temp[i].serverId, name: temp[i].name));
+      users.add(user_model.User(id: temp[i].serverId, name: temp[i].name));
     }
     return users;
   }
 
-  Future<void> insertMultipleUsers(List<userModel.User> users) async {
+  Future<void> insertMultipleUsers(List<user_model.User> users) async {
     await batch((batch) {
       List<UserCompanion> userCompanion = [];
       for (int i = 0; i < users.length; i++) {
@@ -61,16 +61,16 @@ class MyDatabase extends _$MyDatabase {
     });
   }
 
-  Future<List<messageModel.Message>> getMessageByUser(
+  Future<List<message_model.Message>> getMessageByUser(
       int myId, int toUserId) async {
     List<Message> temp = await (select(messages)
           ..where((m) =>
               ((m.fromUserId.equals(myId) & m.toUserId.equals(toUserId)) |
                   (m.fromUserId.equals(toUserId) & m.toUserId.equals(myId)))))
         .get();
-    List<messageModel.Message> messageList = [];
+    List<message_model.Message> messageList = [];
     for (int i = 0; i < temp.length; i++) {
-      messageModel.Message tempMessage = messageModel.Message(
+      message_model.Message tempMessage = message_model.Message(
           id: temp[i].serverId,
           fromUserId: temp[i].fromUserId,
           message: temp[i].message,
@@ -87,7 +87,7 @@ class MyDatabase extends _$MyDatabase {
   }
 
   Future<void> insertMultipleMessages(
-      List<messageModel.Message> messageList) async {
+      List<message_model.Message> messageList) async {
     await batch((batch) {
       List<MessagesCompanion> messagesCompanion = [];
       for (int i = 0; i < messageList.length; i++) {
