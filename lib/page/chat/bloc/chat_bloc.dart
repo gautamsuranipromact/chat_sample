@@ -25,7 +25,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         _getDataFromDatabase(event, emit);
         if (await Util.hasNetwork()) {
           List<Message> messages =
-          await DioClient().getMessages(userId: state.userId);
+              await DioClient().getMessages(userId: state.userId);
           if (messages.isNotEmpty) {
             await Util.getDataBase()!.insertMultipleMessages(messages);
             await _getDataFromDatabase(event, emit);
@@ -34,7 +34,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               status: ChatStatus.success,
             ));
           }
-        }else{
+        } else {
           return emit(state.copyWith(
             status: ChatStatus.success,
           ));
@@ -75,9 +75,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       if (!(await Util.hasNetwork())) {
         return;
       }
-      emit(state.copyWith(
-          sendStatus: SendStatus.submissionInProgress,
-          messages: state.messages));
+      emit(state.copyWith(sendStatus: SendStatus.submissionInProgress));
       SendMessageRequest request =
           SendMessageRequest(message: state.text, toUserId: state.userId);
       await DioClient().sendMessage(request: request);
@@ -87,8 +85,22 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           createdDateTime: DateTime.now().toUtc().toString(),
           fromUserId: (await Preferences.init())?.getInt(Preferences.id));
       message.isSent = true;
-      state.messages.insert(0, message);
-      emit(state.copyWith(sendStatus: SendStatus.submissionSuccess, text: ""));
+
+      if (state.messages.isEmpty) {
+        List<Message> tempMessages = [];
+        tempMessages.insert(0, message);
+        emit(state.copyWith(
+          sendStatus: SendStatus.submissionSuccess,
+          text: "",
+          messages: tempMessages,
+        ));
+      } else {
+        state.messages.insert(0, message);
+        emit(state.copyWith(
+          sendStatus: SendStatus.submissionSuccess,
+          text: "",
+        ));
+      }
     }
   }
 }
