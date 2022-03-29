@@ -49,7 +49,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     int? myId = (await Preferences.init())?.getInt(Preferences.id);
     List<Message> messages =
         await Util.getDataBase()!.getMessagesByUser(myId!, state.userId);
-    messages.sort((a, b) => b.createdDateTime!.compareTo(a.createdDateTime!));
     if (messages.isNotEmpty) {
       emit(state.copyWith(
         status: ChatStatus.success,

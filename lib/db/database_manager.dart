@@ -66,7 +66,11 @@ class MyDatabase extends _$MyDatabase {
     List<Message> temp = await (select(messages)
           ..where((m) =>
               ((m.fromUserId.equals(myId) & m.toUserId.equals(toUserId)) |
-                  (m.fromUserId.equals(toUserId) & m.toUserId.equals(myId)))))
+                  (m.fromUserId.equals(toUserId) & m.toUserId.equals(myId))))
+          ..orderBy([
+            (t) => OrderingTerm(
+                expression: t.createdDateTime, mode: OrderingMode.desc)
+          ]))
         .get();
     List<message_model.Message> messageList = [];
     for (int i = 0; i < temp.length; i++) {
