@@ -29,20 +29,20 @@ class HomePage extends StatelessWidget {
             icon: const Icon(Icons.logout),
           )
         ]),
-        body: const PostsList(),
+        body: const UsersList(),
       ),
     );
   }
 }
 
-class PostsList extends StatefulWidget {
-  const PostsList({Key? key}) : super(key: key);
+class UsersList extends StatefulWidget {
+  const UsersList({Key? key}) : super(key: key);
 
   @override
-  _PostsListState createState() => _PostsListState();
+  _UsersListState createState() => _UsersListState();
 }
 
-class _PostsListState extends State<PostsList> {
+class _UsersListState extends State<UsersList> {
   final _scrollController = ScrollController();
 
   @override
@@ -64,7 +64,7 @@ class _PostsListState extends State<PostsList> {
             }
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
-                return PostListItem(post: state.users[index]);
+                return UserListItem(user: state.users[index]);
               },
               itemCount: state.users.length,
               controller: _scrollController,
@@ -87,27 +87,27 @@ class _PostsListState extends State<PostsList> {
   void _onScroll() {}
 }
 
-class PostListItem extends StatelessWidget {
-  const PostListItem({Key? key, required this.post}) : super(key: key);
+class UserListItem extends StatelessWidget {
+  const UserListItem({Key? key, required this.user}) : super(key: key);
 
-  final User post;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Material(
       child: ListTile(
-        onTap: () => _message(post, context),
-        title: Text(post.name ?? "", style: textTheme.titleMedium),
+        onTap: () => _message(user, context),
+        title: Text(user.name ?? "", style: textTheme.titleMedium),
         dense: true,
       ),
     );
   }
 
-  void _message(User post, BuildContext context) {
+  void _message(User user, BuildContext context) {
     Navigator.push(
       context,
-      ChatPage.route(post.id ?? -1, post.name ?? ""),
+      ChatPage.route(user.id ?? -1, user.name ?? ""),
     );
   }
 }

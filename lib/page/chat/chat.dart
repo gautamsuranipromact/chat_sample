@@ -37,10 +37,10 @@ class MessageList extends StatefulWidget {
   const MessageList({Key? key}) : super(key: key);
 
   @override
-  _PostsListState createState() => _PostsListState();
+  _MessagesListState createState() => _MessagesListState();
 }
 
-class _PostsListState extends State<MessageList> {
+class _MessagesListState extends State<MessageList> {
   final _scrollController = ScrollController();
 
   @override
@@ -63,7 +63,7 @@ class _PostsListState extends State<MessageList> {
             return ListView.builder(
               reverse: true,
               itemBuilder: (BuildContext context, int index) {
-                return PostListItem(post: state.messages[index]);
+                return MessageListItem(message: state.messages[index]);
               },
               itemCount: state.messages.length,
               controller: _scrollController,
@@ -86,15 +86,15 @@ class _PostsListState extends State<MessageList> {
   void _onScroll() {}
 }
 
-class PostListItem extends StatelessWidget {
-  const PostListItem({Key? key, required this.post}) : super(key: key);
+class MessageListItem extends StatelessWidget {
+  const MessageListItem({Key? key, required this.message}) : super(key: key);
 
-  final Message post;
+  final Message message;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: post.isSent
+      child: message.isSent
           ? Container(
               padding: const EdgeInsets.only(right: 15, top: 10, bottom: 10),
               child: Column(
@@ -103,14 +103,14 @@ class PostListItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
-                    post.message ?? "",
+                    message.message ?? "",
                     style: const TextStyle(fontSize: 18),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Text(
                       Util.formattedDate(
-                          Util.stringToDate(post.createdDateTime!)),
+                          Util.stringToDate(message.createdDateTime!)),
                       style: const TextStyle(fontSize: 12),
                     ),
                   )
@@ -125,14 +125,14 @@ class PostListItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
-                    post.message ?? "",
+                    message.message ?? "",
                     style: const TextStyle(fontSize: 18),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Text(
                       Util.formattedDate(
-                          Util.stringToDate(post.createdDateTime!)),
+                          Util.stringToDate(message.createdDateTime!)),
                       style: const TextStyle(fontSize: 12),
                     ),
                   )
