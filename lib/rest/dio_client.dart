@@ -28,7 +28,7 @@ class DioClient {
     return throw Exception("Error on server");
   }
 
-  Future<List<User>> getUser() async {
+  Future<List<User>> getUsers() async {
     await setHeaders();
 
     Response userData = await _dio.get(APIConstants.users);
@@ -43,7 +43,7 @@ class DioClient {
     return throw Exception("Error on server");
   }
 
-  Future<List<Message>> getMessage({required int userId}) async {
+  Future<List<Message>> getMessages({required int userId}) async {
     await setHeaders();
 
     Response userData =

@@ -20,7 +20,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (state.status == HomeStatus.initial) {
         _getDataFromDatabase(event, emit);
         if (await Util.hasNetwork()) {
-          List<User> serverUsers = await DioClient().getUser();
+          List<User> serverUsers = await DioClient().getUsers();
           if (serverUsers.isNotEmpty) {
             await Util.getDataBase()!.insertMultipleUsers(serverUsers);
             await _getDataFromDatabase(event, emit);

@@ -25,7 +25,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         _getDataFromDatabase(event, emit);
         if (await Util.hasNetwork()) {
           List<Message> messages =
-          await DioClient().getMessage(userId: state.userId);
+          await DioClient().getMessages(userId: state.userId);
           if (messages.isNotEmpty) {
             await Util.getDataBase()!.insertMultipleMessages(messages);
             await _getDataFromDatabase(event, emit);
@@ -48,7 +48,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Future<void> _getDataFromDatabase(event, emit) async {
     int? myId = (await Preferences.init())?.getInt(Preferences.id);
     List<Message> messages =
-        await Util.getDataBase()!.getMessageByUser(myId!, state.userId);
+        await Util.getDataBase()!.getMessagesByUser(myId!, state.userId);
     messages.sort((a, b) => b.createdDateTime!.compareTo(a.createdDateTime!));
     if (messages.isNotEmpty) {
       emit(state.copyWith(

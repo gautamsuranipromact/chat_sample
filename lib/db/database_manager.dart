@@ -61,7 +61,7 @@ class MyDatabase extends _$MyDatabase {
     });
   }
 
-  Future<List<message_model.Message>> getMessageByUser(
+  Future<List<message_model.Message>> getMessagesByUser(
       int myId, int toUserId) async {
     List<Message> temp = await (select(messages)
           ..where((m) =>
